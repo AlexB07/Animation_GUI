@@ -3,8 +3,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 
+/** JPanel which we can draw our figure on */
 public class Canvas extends JPanel
 {
+    /* Set up some initial positions for the parts of the stick man */
     Point leftHand = new Point(50, 100);
     Point shoulder = new Point(100, 100);
     Point rightHand = new Point(150, 100);
@@ -16,6 +18,8 @@ public class Canvas extends JPanel
     public Canvas(int width, int height) {
         setPreferredSize(new Dimension(width, height));
         setMaximumSize(new Dimension(width, height));
+
+	/* Set up a listener so that we hear about mouse clicks on the canvas */
         addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {
 
@@ -37,6 +41,7 @@ public class Canvas extends JPanel
             }
         });
 
+	/* Set up a listener so that we hear about mouse movement on the canvas */
         addMouseMotionListener(new MouseMotionListener() {
             public void mouseMoved(MouseEvent e) {
                 
@@ -52,6 +57,7 @@ public class Canvas extends JPanel
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
+        /* Draw the stick man at its current coordinates */
         g2.drawLine(leftHand.xInt(), leftHand.yInt(), shoulder.xInt(), shoulder.yInt());
         g2.drawLine(rightHand.xInt(), rightHand.yInt(), shoulder.xInt(), shoulder.yInt());
         g2.drawLine(leftFoot.xInt(), leftFoot.yInt(), posterior.xInt(), posterior.yInt());
