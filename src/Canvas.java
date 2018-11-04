@@ -1,12 +1,11 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
+import javafx.scene.Group;
+import javafx.scene.shape.*;
+import javafx.scene.paint.Color;
 
-/** JPanel which we can draw our figure on */
-public class Canvas extends JPanel
+/** Group which we can draw our figure on */
+public class Canvas extends Group
 {
-    /* Set up some initial positions for the parts of the stick man */
+    /* Set up some initial positions for the parts of the stick figure */
     Point leftHand = new Point(50, 100);
     Point shoulder = new Point(100, 100);
     Point rightHand = new Point(150, 100);
@@ -14,56 +13,61 @@ public class Canvas extends JPanel
     Point posterior = new Point(100, 150);
     Point leftFoot = new Point(65, 200);
     Point rightFoot = new Point(135, 200);
+
+    /* Create some lines to draw it with */
+    Line leftArm = new Line();
+    Line rightArm = new Line();
+    Line neck = new Line();
+    Line back = new Line();
+    Line leftLeg = new Line();
+    Line rightLeg = new Line();
+
+    /* And a circle for the head */
+    Circle headCircle = new Circle(25, Color.GREY);
+
+    /* And some a node to drag the left hand around with */
+    Circle leftHandNode = new Circle(8, Color.RED);
     
     public Canvas(int width, int height) {
-        setPreferredSize(new Dimension(width, height));
-        setMaximumSize(new Dimension(width, height));
 
-	/* Set up a listener so that we hear about mouse clicks on the canvas */
-        addMouseListener(new MouseListener() {
-            public void mouseClicked(MouseEvent e) {
+        getChildren().add(leftArm);
+        getChildren().add(rightArm);
+        getChildren().add(neck);
+        getChildren().add(back);
+        getChildren().add(leftLeg);
+        getChildren().add(rightLeg);
+        getChildren().add(headCircle);
+        getChildren().add(leftHandNode);
 
-            }
+        pointsToShapes();
 
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            public void mouseExited(MouseEvent e) {
-
-            }
-
-            public void mousePressed(MouseEvent e) {
-                System.out.println("Mouse pressed at " + e.getX() + " " + e.getY());
-            }
-
-            public void mouseReleased(MouseEvent e) {
-            }
-        });
-
-	/* Set up a listener so that we hear about mouse movement on the canvas */
-        addMouseMotionListener(new MouseMotionListener() {
-            public void mouseMoved(MouseEvent e) {
-                
-            }
-            
-            public void mouseDragged(MouseEvent e) {
-                System.out.println("Mouse dragged to " + e.getX() + " " + e.getY());
-            }
-        });
+        /* Set up a listener so that we hear about mouse clicks on the nodes */
+        leftHandNode.setOnMousePressed(event -> {
+                System.out.println("Left hand button press at " + event.getX() + " " + event.getY());
+            });
     }
-    
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
 
-        /* Draw the stick man at its current coordinates */
-        g2.drawLine(leftHand.xInt(), leftHand.yInt(), shoulder.xInt(), shoulder.yInt());
-        g2.drawLine(rightHand.xInt(), rightHand.yInt(), shoulder.xInt(), shoulder.yInt());
-        g2.drawLine(leftFoot.xInt(), leftFoot.yInt(), posterior.xInt(), posterior.yInt());
-        g2.drawLine(rightFoot.xInt(), rightFoot.yInt(), posterior.xInt(), posterior.yInt());
-        g2.drawLine(head.xInt(), head.yInt(), shoulder.xInt(), shoulder.yInt());
-        g2.drawLine(posterior.xInt(), posterior.yInt(), shoulder.xInt(), shoulder.yInt());
-        g2.fillOval(head.xInt() - 20, head.yInt() - 20, 40, 40);
+    /** Helper method to set up a line using two Points */
+    private void setupLine(Line line, Point start, Point end) {
+        line.setStartX(start.x);
+        line.setStartY(start.y);
+        line.setEndX(end.x);
+        line.setEndY(end.y);
+    }
+
+    /** Set up our shapes to the current positions of our points */
+    private void pointsToShapes() {
+        setupLine(leftArm, leftHand, shoulder);
+        setupLine(rightArm, rightHand, shoulder);
+        setupLine(neck, shoulder, head);
+        setupLine(back, shoulder, posterior);
+        setupLine(leftLeg, posterior, leftFoot);
+        setupLine(rightLeg, posterior, rightFoot);
+
+        headCircle.setCenterX(head.x);
+        headCircle.setCenterY(head.y);
+
+        leftHandNode.setCenterX(leftHand.x);
+        leftHandNode.setCenterY(leftHand.y);
     }
 }

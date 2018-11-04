@@ -1,22 +1,18 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
 
-public class Main extends JFrame
+public class Main extends Application
 {
-    Canvas canvas = new Canvas(800, 400);
+    Canvas canvas = new Canvas(800, 600);
     
     public static void main(String[] args) {
-        /* Create a new Main object (which is a JFrame) and open it */
-        Main main = new Main();
-        main.setVisible(true);
+        launch(args);
     }
 
-    public Main() {
-        setTitle("Animation");
-        setSize(800, 600);
-
-        add(canvas);
-        pack();
+    public void start(Stage stage) {
+        stage.setTitle("Animation");
+        stage.setScene(new Scene(canvas, 800, 600));
+        stage.show();
     }
 }

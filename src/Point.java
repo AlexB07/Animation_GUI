@@ -6,14 +6,6 @@ class Point
         this.y = y;
     }
 
-    int xInt() {
-        return (int) Math.round(x);
-    }
-
-    int yInt() {
-        return (int) Math.round(y);
-    }
-    
     public double x;
     public double y;
 }
