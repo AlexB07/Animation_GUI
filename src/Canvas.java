@@ -1,4 +1,7 @@
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.*;
 import javafx.scene.paint.Color;
 
@@ -13,6 +16,7 @@ public class Canvas extends Group
     Point posterior = new Point(100, 150);
     Point leftFoot = new Point(65, 200);
     Point rightFoot = new Point(135, 200);
+    Point startDrag = new Point(0, 0);
 
     /* Create some lines to draw it with */
     Line leftArm = new Line();
@@ -29,7 +33,7 @@ public class Canvas extends Group
     Circle leftHandNode = new Circle(8, Color.RED);
     
     public Canvas(int width, int height) {
-
+    	intialiseNodes();
         getChildren().add(leftArm);
         getChildren().add(rightArm);
         getChildren().add(neck);
@@ -41,12 +45,33 @@ public class Canvas extends Group
 
         pointsToShapes();
 
-        /* Set up a listener so that we hear about mouse clicks on the nodes */
-        leftHandNode.setOnMousePressed(event -> {
-                System.out.println("Left hand button press at " + event.getX() + " " + event.getY());
-            });
+        leftHandNode.setOnMouseDragged(nodeMouseEvent);
     }
+	       
+    /**Drags object which is clicked on **/
+    EventHandler<MouseEvent> nodeMouseEvent = new EventHandler<MouseEvent>() {
+    	public void handle(MouseEvent e) {
+    		if (e.getButton() == MouseButton.PRIMARY) { 
+    			Circle temp = (Circle) e.getSource();
+    			temp.setCenterX(e.getX());
+    			temp.setCenterY(e.getY());
+    		nodetoPoint();
+    		}
+    	}
+    };
 
+    private void nodetoPoint() {
+    	leftHand.x = leftHandNode.getCenterX();
+    	leftHand.y = leftHandNode.getCenterY();
+    	pointsToShapes();
+    }
+    
+    private void intialiseNodes() {
+    	leftHandNode.setCenterX(leftHand.x);
+    	leftHandNode.setCenterY(leftHand.y);
+    }
+    
+    
     /** Helper method to set up a line using two Points */
     private void setupLine(Line line, Point start, Point end) {
         line.setStartX(start.x);
@@ -67,7 +92,7 @@ public class Canvas extends Group
         headCircle.setCenterX(head.x);
         headCircle.setCenterY(head.y);
 
-        leftHandNode.setCenterX(leftHand.x);
-        leftHandNode.setCenterY(leftHand.y);
+       // leftHandNode.setCenterX(leftHand.x);
+       // leftHandNode.setCenterY(leftHand.y);
     }
 }
