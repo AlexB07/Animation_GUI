@@ -31,6 +31,12 @@ public class Canvas extends Group
 
     /* And some a node to drag the left hand around with */
     Circle leftHandNode = new Circle(8, Color.RED);
+    Circle rightHandNode = new Circle(8, Color.RED);
+    Circle leftFootNode = new Circle(8, Color.RED);
+    Circle rightFootNode = new Circle(8, Color.RED);
+    Circle neckNode = new Circle(8, Color.RED);
+    Circle backNode = new Circle(8, Color.RED);
+    
     
     public Canvas(int width, int height) {
     	intialiseNodes();
@@ -42,10 +48,21 @@ public class Canvas extends Group
         getChildren().add(rightLeg);
         getChildren().add(headCircle);
         getChildren().add(leftHandNode);
+        getChildren().add(rightHandNode);
+        getChildren().add(leftFootNode);
+        getChildren().add(rightFootNode);
+        getChildren().add(neckNode);
+        getChildren().add(backNode);
 
         pointsToShapes();
 
         leftHandNode.setOnMouseDragged(nodeMouseEvent);
+        rightHandNode.setOnMouseDragged(nodeMouseEvent);
+        leftFootNode.setOnMouseDragged(nodeMouseEvent);
+        rightFootNode.setOnMouseDragged(nodeMouseEvent);
+        neckNode.setOnMouseDragged(nodeMouseEvent);
+        backNode.setOnMouseDragged(nodeMouseEvent);
+        headCircle.setOnMouseDragged(nodeMouseEvent);
     }
 	       
     /**Drags object which is clicked on **/
@@ -55,20 +72,39 @@ public class Canvas extends Group
     			Circle temp = (Circle) e.getSource();
     			temp.setCenterX(e.getX());
     			temp.setCenterY(e.getY());
-    		nodetoPoint();
+    		pointToNode();
     		}
     	}
     };
 
-    private void nodetoPoint() {
-    	leftHand.x = leftHandNode.getCenterX();
-    	leftHand.y = leftHandNode.getCenterY();
+    private void pointToNode() {
+    	leftHand.updatePointFromNode(leftHandNode);
+    	rightHand.updatePointFromNode(rightHandNode);
+    	leftFoot.updatePointFromNode(leftFootNode);
+    	rightFoot.updatePointFromNode(rightFootNode);
+    	posterior.updatePointFromNode(backNode);
+    	shoulder.updatePointFromNode(neckNode);
+    	head.updatePointFromNode(headCircle);
+    	
     	pointsToShapes();
     }
     
     private void intialiseNodes() {
     	leftHandNode.setCenterX(leftHand.x);
     	leftHandNode.setCenterY(leftHand.y);
+    	rightHandNode.setCenterX(rightHand.x);
+    	rightHandNode.setCenterY(rightHand.y);
+    	leftFootNode.setCenterX(leftFoot.x);
+    	leftFootNode.setCenterY(leftFoot.y);
+    	rightFootNode.setCenterX(rightFoot.x);
+    	rightFootNode.setCenterY(rightFoot.y);
+    	
+    	backNode.setCenterX(posterior.x);
+    	backNode.setCenterY(posterior.y);
+    	neckNode.setCenterX(shoulder.x);
+    	neckNode.setCenterY(shoulder.y);
+    	headCircle.setCenterX(head.x);
+    	headCircle.setCenterY(head.y);	
     }
     
     
@@ -89,8 +125,8 @@ public class Canvas extends Group
         setupLine(leftLeg, posterior, leftFoot);
         setupLine(rightLeg, posterior, rightFoot);
 
-        headCircle.setCenterX(head.x);
-        headCircle.setCenterY(head.y);
+        //headCircle.setCenterX(head.x);
+        //headCircle.setCenterY(head.y);
 
        // leftHandNode.setCenterX(leftHand.x);
        // leftHandNode.setCenterY(leftHand.y);
