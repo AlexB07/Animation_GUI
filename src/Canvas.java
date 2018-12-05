@@ -1,11 +1,14 @@
 
 
+import java.util.ArrayList;
+
+import com.sun.media.sound.ModelInstrument;
+
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.*;
-import sun.security.util.Length;
 import javafx.scene.paint.Color;
 
 /** Group which we can draw our figure on */
@@ -26,6 +29,8 @@ public class Canvas extends Group {
 	Line back = new Line();
 	Line leftLeg = new Line();
 	Line rightLeg = new Line();
+	
+	Group stick1 = new Group();
 
 	/* And a circle for the head */
 	Node headCircle = new Node(25, Color.GREY, shoulder, head);
@@ -39,7 +44,37 @@ public class Canvas extends Group {
 	Node backNode = new Node(8, Color.RED);
 
 	public Canvas(int width, int height) {
+		ArrayList<Line> lineList = new ArrayList<Line>();
+		//Initiate lineList
+		lineList.add(leftArm);
+		lineList.add(rightArm);
+		lineList.add(neck);
+		lineList.add(back);
+		lineList.add(leftLeg);
+		lineList.add(rightLeg);
+		
+		ArrayList<Node> nodeList = new ArrayList<Node>();
+		nodeList.add(leftHandNode);
+		nodeList.add(rightHandNode);
+		nodeList.add(leftFootNode);
+		nodeList.add(rightFootNode);
+		nodeList.add(neckNode);
+		nodeList.add(backNode);
+		nodeList.add(headCircle);
+		
 		intialiseNodes();
+		
+		for (Line l : lineList) {
+			//getChildren().add(l);
+			stick1.getChildren().add(l);
+		}
+		
+		for (Node n : nodeList) {
+			//getChildren().add(n);
+			stick1.getChildren().add(n);
+		}
+		getChildren().add(stick1);
+		/*
 		getChildren().add(leftArm);
 		getChildren().add(rightArm);
 		getChildren().add(neck);
@@ -53,16 +88,20 @@ public class Canvas extends Group {
 		getChildren().add(rightFootNode);
 		getChildren().add(neckNode);
 		getChildren().add(backNode);
-
+		 */
 		pointsToShapes();
 
 		leftHandNode.setOnMouseDragged(nodeMouseEvent);
 		rightHandNode.setOnMouseDragged(nodeMouseEvent);
 		leftFootNode.setOnMouseDragged(nodeMouseEvent);
 		rightFootNode.setOnMouseDragged(nodeMouseEvent);
-		neckNode.setOnMouseDragged(nodeMouseEvent);
-		backNode.setOnMouseDragged(nodeMouseEvent);
+		neckNode.setOnMouseDragged(nodeDragBody);
+		//backNode.setOnMouseDragged(nodeMouseEvent);
 		headCircle.setOnMouseDragged(nodeMouseEvent);
+		
+	}
+	
+	public void setupGroupStickman() {
 		
 	}
 
@@ -82,11 +121,22 @@ public class Canvas extends Group {
 			}
 		}
 	};
+	
+	EventHandler<MouseEvent> nodeDragBody = new EventHandler<MouseEvent>() {
 
-	public boolean isDistance() {
+		public void handle(MouseEvent event) {
+			if (event.getButton() == MouseButton.PRIMARY) {
+				Point mouse = new Point(event.getX(), event.getY());
+			//Node temp = (Node) event.getSource();
+			stick1.setTranslateX(event.getSceneX() - shoulder.x);
+			stick1.setTranslateY(event.getSceneY() - shoulder.y);
+			}
+			
+		}
 		
-		return false;
-	}
+	};
+
+	
 	
 	public double lengthOfLine(Point one, Point two) {
 		double length;
