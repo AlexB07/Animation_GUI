@@ -1,8 +1,5 @@
 
-
 import java.util.ArrayList;
-
-import com.sun.media.sound.ModelInstrument;
 
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -13,6 +10,8 @@ import javafx.scene.paint.Color;
 
 /** Group which we can draw our figure on */
 public class Canvas extends Group {
+	/* Array node list */
+	ArrayList<Node> nodeList = new ArrayList<Node>();
 	/* Set up some initial positions for the parts of the stick figure */
 	Point shoulder = new Point(100, 100);
 	Point posterior = new Point(100, 150);
@@ -29,7 +28,7 @@ public class Canvas extends Group {
 	Line back = new Line();
 	Line leftLeg = new Line();
 	Line rightLeg = new Line();
-	
+
 	Group stick1 = new Group();
 
 	/* And a circle for the head */
@@ -43,17 +42,18 @@ public class Canvas extends Group {
 	Node neckNode = new Node(8, Color.RED);
 	Node backNode = new Node(8, Color.RED);
 
+	// test purposes
+	Node test = new Node(8, Color.BLUE);
+
 	public Canvas(int width, int height) {
 		ArrayList<Line> lineList = new ArrayList<Line>();
-		//Initiate lineList
+		// Initiate lineList
 		lineList.add(leftArm);
 		lineList.add(rightArm);
 		lineList.add(neck);
 		lineList.add(back);
 		lineList.add(leftLeg);
 		lineList.add(rightLeg);
-		
-		ArrayList<Node> nodeList = new ArrayList<Node>();
 		nodeList.add(leftHandNode);
 		nodeList.add(rightHandNode);
 		nodeList.add(leftFootNode);
@@ -61,33 +61,27 @@ public class Canvas extends Group {
 		nodeList.add(neckNode);
 		nodeList.add(backNode);
 		nodeList.add(headCircle);
-		
+		nodeList.add(test);
+
 		intialiseNodes();
-		
+
 		for (Line l : lineList) {
-			//getChildren().add(l);
+			// getChildren().add(l);
 			stick1.getChildren().add(l);
 		}
-		
+
 		for (Node n : nodeList) {
-			//getChildren().add(n);
+			// getChildren().add(n);
 			stick1.getChildren().add(n);
 		}
 		getChildren().add(stick1);
 		/*
-		getChildren().add(leftArm);
-		getChildren().add(rightArm);
-		getChildren().add(neck);
-		getChildren().add(back);
-		getChildren().add(leftLeg);
-		getChildren().add(rightLeg);
-		getChildren().add(headCircle);
-		getChildren().add(leftHandNode);
-		getChildren().add(rightHandNode);
-		getChildren().add(leftFootNode);
-		getChildren().add(rightFootNode);
-		getChildren().add(neckNode);
-		getChildren().add(backNode);
+		 * getChildren().add(leftArm); getChildren().add(rightArm);
+		 * getChildren().add(neck); getChildren().add(back); getChildren().add(leftLeg);
+		 * getChildren().add(rightLeg); getChildren().add(headCircle);
+		 * getChildren().add(leftHandNode); getChildren().add(rightHandNode);
+		 * getChildren().add(leftFootNode); getChildren().add(rightFootNode);
+		 * getChildren().add(neckNode); getChildren().add(backNode);
 		 */
 		pointsToShapes();
 
@@ -96,13 +90,9 @@ public class Canvas extends Group {
 		leftFootNode.setOnMouseDragged(nodeMouseEvent);
 		rightFootNode.setOnMouseDragged(nodeMouseEvent);
 		neckNode.setOnMouseDragged(nodeDragBody);
-		//backNode.setOnMouseDragged(nodeMouseEvent);
+		backNode.setOnMouseDragged(nodeRotateBody);
 		headCircle.setOnMouseDragged(nodeMouseEvent);
-		
-	}
-	
-	public void setupGroupStickman() {
-		
+
 	}
 
 	/** Drags object which is clicked on **/
@@ -113,37 +103,95 @@ public class Canvas extends Group {
 				Point mouse = new Point(e.getX(), e.getY());
 				double lengthToMouse = lengthOfLine(temp.getPointOne(), mouse);
 				double lengthOfPart = lengthOfLine(temp.getPointOne(), temp.getPointTwo());
-				if ((lengthToMouse >= lengthOfPart) || (lengthToMouse <= lengthOfPart))  {
-					temp.setCenterX(temp.getPointOne().x + (lengthOfPart * (e.getX() - temp.getPointOne().x))/ lengthToMouse);
-					temp.setCenterY(temp.getPointOne().y + (lengthOfPart * (e.getY() - temp.getPointOne().y))/ lengthToMouse);
+				if ((lengthToMouse >= lengthOfPart) || (lengthToMouse <= lengthOfPart)) {
+					temp.setCenterX(
+							temp.getPointOne().x + (lengthOfPart * (e.getX() - temp.getPointOne().x)) / lengthToMouse);
+					temp.setCenterY(
+							temp.getPointOne().y + (lengthOfPart * (e.getY() - temp.getPointOne().y)) / lengthToMouse);
 					pointToNode();
 				}
 			}
 		}
 	};
-	
+
 	EventHandler<MouseEvent> nodeDragBody = new EventHandler<MouseEvent>() {
 
 		public void handle(MouseEvent event) {
 			if (event.getButton() == MouseButton.PRIMARY) {
-				Point mouse = new Point(event.getX(), event.getY());
-			//Node temp = (Node) event.getSource();
-			stick1.setTranslateX(event.getSceneX() - shoulder.x);
-			stick1.setTranslateY(event.getSceneY() - shoulder.y);
+				stick1.setTranslateX(event.getSceneX() - shoulder.x);
+				stick1.setTranslateY(event.getSceneY() - shoulder.y);
 			}
-			
+
 		}
-		
+
 	};
 
-	
-	
+	EventHandler<MouseEvent> nodeRotateBody = new EventHandler<MouseEvent>() {
+		public void handle(MouseEvent event) {
+
+			if (event.getButton() == MouseButton.PRIMARY) {
+
+				Point mouse = new Point(event.getSceneX(), event.getSceneY());
+				double lengthOfMouse = lengthOfLine(head, mouse);
+				double lengthOfNeck = lengthOfLine(head, posterior);
+				Point difference = null;
+				/*if (lengthOfMouse >= lengthOfNeck || lengthOfMouse >= lengthOfNeck) {
+					difference = new Point((headCircle.getPointOne().x
+							+ (lengthOfNeck * (event.getSceneX() - headCircle.getPointOne().x)) / lengthOfMouse),
+							(headCircle.getPointOne().y
+									+ (lengthOfNeck * (event.getSceneY() - headCircle.getPointOne().y))
+											/ lengthOfMouse));
+
+				} else */{
+
+					difference = new Point(event.getSceneX() - posterior.x, event.getSceneY() - posterior.y);
+				}
+				test.setCenterX(difference.x);
+				test.setCenterY(difference.y);
+
+				/*
+				 * Point mouse = new Point(event.getSceneX(), event.getSceneY()); double
+				 * lengthToMouse = lengthOfLine(headCircle.getPointTwo(), mouse);
+				 * 
+				 * double lengthOfPart = lengthOfLine(headCircle.getPointTwo(),
+				 * headCircle.getPointOne()); if ((lengthToMouse >= lengthOfPart) ||
+				 * (lengthToMouse <= lengthOfPart)) { Point diff = new
+				 * Point((headCircle.getPointTwo().x + (lengthOfPart * (event.getSceneX() -
+				 * headCircle.getPointTwo().x) - shoulder.x) / lengthToMouse),
+				 * (headCircle.getPointTwo().y + (lengthOfPart * (event.getSceneY() -
+				 * headCircle.getPointTwo().y)) / lengthToMouse) - shoulder.y);
+				 * 
+				 */
+
+				setPositionOfNodes(difference);
+				pointToNode();
+
+				// setPositionOfNodes(event.getSceneX(), event.getSceneY());
+
+			}
+		}
+
+	};
+
+	public void setPositionOfNodes(Point x) {
+		nodeList.remove(headCircle);
+		//nodeList.remove(neckNode);
+		for (Node n : nodeList) {
+			n.setCenterX(n.getCenterX() + x.x);
+			n.setCenterY(n.getCenterY() + x.y);
+		}
+		//neckNode.setCenterX(x.x);
+		//neckNode.setCenterY(x.y);
+		nodeList.add(headCircle);
+		//nodeList.add(neckNode);
+	}
+
 	public double lengthOfLine(Point one, Point two) {
 		double length;
 		length = (Math.pow((two.x - one.x), 2) + (Math.pow((two.y - one.y), 2)));
 		length = Math.sqrt(length);
 		return length;
-		
+
 	}
 
 	private void pointToNode() {
