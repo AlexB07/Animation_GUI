@@ -21,6 +21,8 @@ public class Canvas extends Group {
 	Point leftFoot = new Point(65, 200);
 	Point rightFoot = new Point(135, 200);
 
+	final double lengthOfBodyPlusNeck = lengthOfLine(head, posterior);
+
 	/* Create some lines to draw it with */
 	Line leftArm = new Line();
 	Line rightArm = new Line();
@@ -39,14 +41,15 @@ public class Canvas extends Group {
 	Node rightHandNode = new Node(8, Color.RED, shoulder, rightHand);
 	Node leftFootNode = new Node(8, Color.RED, posterior, leftFoot);
 	Node rightFootNode = new Node(8, Color.RED, posterior, rightFoot);
-	Node neckNode = new Node(8, Color.RED);
-	Node backNode = new Node(8, Color.RED);
+	Node neckNode = new Node(8, Color.RED, posterior, shoulder);
+	Node backNode = new Node(8, Color.RED, shoulder, posterior);
 
 	// test purposes
 	Node test = new Node(8, Color.BLUE);
+	private ArrayList<Line> lineList = new ArrayList<Line>();
 
 	public Canvas(int width, int height) {
-		ArrayList<Line> lineList = new ArrayList<Line>();
+
 		// Initiate lineList
 		lineList.add(leftArm);
 		lineList.add(rightArm);
@@ -61,7 +64,7 @@ public class Canvas extends Group {
 		nodeList.add(neckNode);
 		nodeList.add(backNode);
 		nodeList.add(headCircle);
-		nodeList.add(test);
+		// nodeList.add(test);
 
 		intialiseNodes();
 
@@ -128,45 +131,24 @@ public class Canvas extends Group {
 
 	EventHandler<MouseEvent> nodeRotateBody = new EventHandler<MouseEvent>() {
 		public void handle(MouseEvent event) {
-
 			if (event.getButton() == MouseButton.PRIMARY) {
+				Point mouse = new Point(event.getX(), event.getY());
 
-				Point mouse = new Point(event.getSceneX(), event.getSceneY());
 				double lengthOfMouse = lengthOfLine(head, mouse);
-				double lengthOfNeck = lengthOfLine(head, posterior);
+				double lengthOfNeck = lengthOfLine(head, shoulder);
 				Point difference = null;
-				/*if (lengthOfMouse >= lengthOfNeck || lengthOfMouse >= lengthOfNeck) {
-					difference = new Point((headCircle.getPointOne().x
-							+ (lengthOfNeck * (event.getSceneX() - headCircle.getPointOne().x)) / lengthOfMouse),
-							(headCircle.getPointOne().y
-									+ (lengthOfNeck * (event.getSceneY() - headCircle.getPointOne().y))
-											/ lengthOfMouse));
+				double totalLength = lengthOfBodyPlusNeck;
 
-				} else */{
+				if (lengthOfMouse >= totalLength || lengthOfMouse <= totalLength) {
+					double x = (headCircle.getPointTwo().x
+							+ ((lengthOfNeck) * ((event.getX()) - headCircle.getPointTwo().x)) / (lengthOfMouse));
+					double y = (headCircle.getPointTwo().y
+							+ ((lengthOfNeck) * ((event.getY()) - headCircle.getPointTwo().y)) / (lengthOfMouse));
 
-					difference = new Point(event.getSceneX() - posterior.x, event.getSceneY() - posterior.y);
+					difference = new Point(x - shoulder.x, y - shoulder.y);
 				}
-				test.setCenterX(difference.x);
-				test.setCenterY(difference.y);
-
-				/*
-				 * Point mouse = new Point(event.getSceneX(), event.getSceneY()); double
-				 * lengthToMouse = lengthOfLine(headCircle.getPointTwo(), mouse);
-				 * 
-				 * double lengthOfPart = lengthOfLine(headCircle.getPointTwo(),
-				 * headCircle.getPointOne()); if ((lengthToMouse >= lengthOfPart) ||
-				 * (lengthToMouse <= lengthOfPart)) { Point diff = new
-				 * Point((headCircle.getPointTwo().x + (lengthOfPart * (event.getSceneX() -
-				 * headCircle.getPointTwo().x) - shoulder.x) / lengthToMouse),
-				 * (headCircle.getPointTwo().y + (lengthOfPart * (event.getSceneY() -
-				 * headCircle.getPointTwo().y)) / lengthToMouse) - shoulder.y);
-				 * 
-				 */
-
 				setPositionOfNodes(difference);
 				pointToNode();
-
-				// setPositionOfNodes(event.getSceneX(), event.getSceneY());
 
 			}
 		}
@@ -175,15 +157,12 @@ public class Canvas extends Group {
 
 	public void setPositionOfNodes(Point x) {
 		nodeList.remove(headCircle);
-		//nodeList.remove(neckNode);
 		for (Node n : nodeList) {
 			n.setCenterX(n.getCenterX() + x.x);
 			n.setCenterY(n.getCenterY() + x.y);
+
 		}
-		//neckNode.setCenterX(x.x);
-		//neckNode.setCenterY(x.y);
 		nodeList.add(headCircle);
-		//nodeList.add(neckNode);
 	}
 
 	public double lengthOfLine(Point one, Point two) {
@@ -207,20 +186,9 @@ public class Canvas extends Group {
 	}
 
 	private void intialiseNodes() {
-		leftHandNode.setCenterX(leftHand.x);
-		leftHandNode.setCenterY(leftHand.y);
-		rightHandNode.setCenterX(rightHand.x);
-		rightHandNode.setCenterY(rightHand.y);
-		leftFootNode.setCenterX(leftFoot.x);
-		leftFootNode.setCenterY(leftFoot.y);
-		rightFootNode.setCenterX(rightFoot.x);
-		rightFootNode.setCenterY(rightFoot.y);
-		backNode.setCenterX(posterior.x);
-		backNode.setCenterY(posterior.y);
-		neckNode.setCenterX(shoulder.x);
-		neckNode.setCenterY(shoulder.y);
-		headCircle.setCenterX(head.x);
-		headCircle.setCenterY(head.y);
+		for (Node n : nodeList) {
+			n.updatePos(n.getPointTwo());
+		}
 	}
 
 	/** Helper method to set up a line using two Points */

@@ -20,7 +20,7 @@ class Point
     	this.y = y;
     }
     /*Takes center point from nodes and updates point  */
-    public void updatePointFromNode(Circle circle) {
+    public void updatePointFromNode(Node circle) {
     	this.x = circle.getCenterX();
     	this.y = circle.getCenterY();
     }
