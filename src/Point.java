@@ -1,4 +1,3 @@
-import javafx.scene.shape.Circle;
 
 /** Simple class to hold a point position */
 class Point
