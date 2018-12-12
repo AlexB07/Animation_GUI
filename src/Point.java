@@ -2,6 +2,10 @@
 /** Simple class to hold a point position */
 class Point
 {
+	
+	public Point() {
+		
+	}
     public Point (double x, double y) {
         this.x = x;
         this.y = y;
@@ -18,6 +22,13 @@ class Point
     	this.x = x;
     	this.y = y;
     }
+    
+    public void updatePointFromOther(Point other) {
+    	this.x = other.x;
+    	this.y = other.y;
+    }
+    
+    
     /*Takes center point from nodes and updates point  */
     public void updatePointFromNode(Node circle) {
     	this.x = circle.getCenterX();
