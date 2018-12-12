@@ -18,7 +18,7 @@ public class Main extends Application
     }
 
     public void start(Stage stage) {
-    	undoList.add(canvas);
+    	undoList.add(new Canvas(canvas));
     	VBox vb = new VBox();
     	vb.getChildren().add(canvas);
         stage.setTitle("Animation");
@@ -29,17 +29,18 @@ public class Main extends Application
 
 			@Override
 			public void handle(ActionEvent event) {
-				//System.out.println("list size " +undoList.size());
-//				System.out.println(undoList.get(undoList.size()-1).getChildren().get(1));
-				
-				if (undoList.size() >= 1 && undoList.size()  >1) {
-				Canvas tempCanvas = undoList.get(undoList.size()-1);
-				undoList.remove(undoList.size()-1);
-				System.out.println("list size " +undoList.size() );
-				canvas = tempCanvas;
-				vb.getChildren().clear();
-				vb.getChildren().addAll(canvas, toolbar);
-				//stage.setScene(new Scene(vb));
+				if (undoList.size() >= 1) {
+					if(undoList.size() != 1) {
+						undoList.remove(undoList.size()-1);
+					}
+					else {
+						undoList.clear();
+						undoList.add(new Canvas(canvas));
+					}
+					Canvas tempCanvas = undoList.get(undoList.size()-1);
+					canvas = new Canvas(tempCanvas);
+					vb.getChildren().clear();
+					vb.getChildren().addAll(canvas, toolbar);
 				}
 			}
 		});
@@ -49,9 +50,9 @@ public class Main extends Application
     	btnAddStickman.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				canvas.addStickman();
+				undoList.add(new Canvas(canvas));
 			}
 		});
-        
         
         
         
@@ -60,35 +61,7 @@ public class Main extends Application
        stage.setScene(new Scene(vb));
         stage.show();
     }
-    /*
     
-    public HBox toolbar() {
-    	HBox toolbar = new HBox();
-    	Button btnUndo = new Button("Undo");
-    	toolbar.getChildren().add(btnUndo);
-    	btnUndo.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-				System.out.println("list size " +undoList.size());
-				Canvas tempCanvas = undoList.get(undoList.size()-1);
-				
-				
-			}
-		});
-    	
-    	Button btnAddStickman = new Button("Add Stickman");
-    	toolbar.getChildren().add(btnAddStickman);
-    	btnAddStickman.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent event) {
-				new Stickman(canvas);
-			}
-		});
-    	
-    	
-    	return toolbar;
-    }
-    */
     
     
 }

@@ -17,7 +17,9 @@ public class Canvas extends Group {
 		//new Stickman(this);
 	}
 	
-	public Canvas(Canvas other, int width, int height) {
+	public Canvas(Canvas other) {
+		int width = 800;
+		int height = 600;
 		Rectangle rect = new Rectangle(width - 100, height, Color.WHITE);
 		rect.setStroke(Color.BLACK);                                     
 		getChildren().add(rect); 
@@ -25,10 +27,8 @@ public class Canvas extends Group {
 		
 		
 		for (Stickman s: other.stickmanList) {
-				Stickman a = new Stickman(s, this);
-				System.out.println("x " + s.getTranslateX() + " y " + s.getTranslateY());
-				a.setTranslateX(s.getTranslateX());
-				a.setTranslateY(s.getTranslateY());
+				this.stickmanList.add(new Stickman(s, this));
+				//System.out.println("x " + s.getTranslateX() + " y " + s.getTranslateY());
 		}
 		  
 	
