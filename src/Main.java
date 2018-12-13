@@ -12,6 +12,7 @@ public class Main extends Application
 {
     static Canvas canvas = new Canvas(800, 600);
     static ArrayList<Canvas> undoList = new ArrayList<>();
+    static ArrayList<Frame> frameList = new ArrayList<Frame>();
     
     public static void main(String[] args) {
         launch(args);
@@ -51,6 +52,17 @@ public class Main extends Application
 			public void handle(ActionEvent event) {
 				canvas.addStickman();
 				undoList.add(new Canvas(canvas));
+			}
+		});
+    	
+    	Button btnAddFrame = new Button("Add Frame");
+    	toolbar.getChildren().add(btnAddFrame);
+    	btnAddFrame.setOnAction(new EventHandler<ActionEvent>() {
+
+			
+			public void handle(ActionEvent event) {
+				System.out.println("Adding new frame");
+				frameList.add(new Frame(undoList));
 			}
 		});
         
