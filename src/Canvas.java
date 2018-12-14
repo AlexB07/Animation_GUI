@@ -48,7 +48,7 @@ public class Canvas extends Group {
 	}
 	
 	
-	public void addCanvas() {
-		Main.undoList.add(this);
-	}
+	//public void addCanvas() {
+	//	Main.undoList.add(this);
+	//}
 }

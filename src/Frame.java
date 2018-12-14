@@ -9,9 +9,14 @@ public class Frame extends Group {
 	
 	
 	
-	public Frame() {
-		
+	public Frame(Canvas other) {
+		this.addToList(other);
 	}
+	
+	public void addToList(Canvas other) {
+		undoList.add(new Canvas(other));
+	}
+	
 	
 	public Frame(ArrayList<Canvas> otherList) {		
 		for (Canvas c : otherList) {
@@ -35,17 +40,13 @@ public class Frame extends Group {
 		return undoList.size();
 	}
 	
-	public void removeFromList(int index) {
-		undoList.remove(index);
-	}
 	
-	public void clearList() {
-		undoList.clear();
-	}
 	
-	public void addNew(Canvas other) {
-		undoList.add(new Canvas(other));
-	}
+	
+	
+	
+	
+	
 	
 
 }

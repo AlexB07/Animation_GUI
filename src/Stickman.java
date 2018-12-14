@@ -193,8 +193,12 @@ public class Stickman extends Group {
 
 		@Override
 		public void handle(MouseEvent event) {
-			System.out.println("creating undo record and size is "+ Main.undoList.size());  
-			Main.undoList.add(new Canvas(Main.canvas));
+			System.out.println("creating undo record and size is "+ Main.frameList.size());  
+			System.out.println(Main.currentFrame);
+			//Main.undoList.add(new Canvas(Main.canvas));
+			Main.frameList.get(Main.currentFrame).addToList(Main.canvas);
+			
+			
 			pointToNode();
 			
 		}
