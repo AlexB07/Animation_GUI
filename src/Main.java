@@ -118,7 +118,7 @@ public class Main extends Application {
 
 			@Override
 			public void handle(long now) {
-				if (now - lastUpdate >= frameRate) {
+				if (now - lastUpdate >= frameRate && frameList.size() > 1) {
 					frame++;
 					canvas = new Canvas(frameList.get(frame).getFrame());
 					resetVBox(vb, toolbar);
@@ -145,6 +145,7 @@ public class Main extends Application {
 				//41.66667 milliseconds equals 24 frames per second
 				frameRate = 41_666_667;
 				t.start();
+				
 			}
 		});
 		
