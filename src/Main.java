@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -136,7 +137,8 @@ public class Main extends Application {
 		
 		
 		
-		Button btnPlay = new Button("Play 24 Frames");
+		Button btnPlay = new Button("Play 24");
+		btnPlay.setTooltip(new Tooltip("Plays animation 24 Frames Per Second (24 FPS)"));
 		toolbar.getChildren().add(btnPlay);
 		btnPlay.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -149,8 +151,9 @@ public class Main extends Application {
 			}
 		});
 		
-		Button btnPlay12 = new Button("Play 12 Frames");
+		Button btnPlay12 = new Button("Play 12");
 		toolbar.getChildren().add(btnPlay12);
+		btnPlay12.setTooltip(new Tooltip("Plays animation 12 Frames Per Second (12 FPS)"));
 		btnPlay12.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -176,8 +179,5 @@ public class Main extends Application {
 		vb.getChildren().addAll(canvas, hb);
 	}
 
-	public void playFrames(long delay, VBox vb, HBox hb) {
-
-	}
-
+	
 }
