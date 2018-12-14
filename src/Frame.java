@@ -4,7 +4,7 @@ import javafx.scene.Group;
 
 public class Frame extends Group {
 	
-	ArrayList<Canvas> undoList = new ArrayList<Canvas>();
+	 private ArrayList<Canvas> undoList = new ArrayList<Canvas>();
 	
 	
 	
@@ -21,12 +21,31 @@ public class Frame extends Group {
 			otherList.clear();
 				otherList.add(new Canvas(Main.canvas));
 		}
+	
+	public ArrayList<Canvas> getUndoList(){
+		return undoList;
+	}
 
 		
+	public Canvas getFrame() {
+		return undoList.get(undoList.size()-1);
+	}
 	
+	public int getSizeOfList() {
+		return undoList.size();
+	}
 	
+	public void removeFromList(int index) {
+		undoList.remove(index);
+	}
 	
+	public void clearList() {
+		undoList.clear();
+	}
 	
+	public void addNew(Canvas other) {
+		undoList.add(new Canvas(other));
+	}
 	
 
 }
