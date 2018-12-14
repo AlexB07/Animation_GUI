@@ -23,7 +23,7 @@ public class Canvas extends Group {
 		Rectangle rect = new Rectangle(width - 100, height, Color.WHITE);
 		rect.setStroke(Color.BLACK);                                     
 		getChildren().add(rect); 
-		System.out.println("copying " + other.stickmanList.size());
+		//System.out.println("copying " + other.stickmanList.size());
 		
 		
 		for (Stickman s: other.stickmanList) {

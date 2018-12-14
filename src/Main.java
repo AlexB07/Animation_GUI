@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,6 +17,8 @@ public class Main extends Application {
 	static ArrayList<Frame> frameList = new ArrayList<Frame>();
 	static int currentFrame = 0;
 	Text txtFrame = new Text("No Frames");
+	long frameRate = 0;
+	
 
 	public static void main(String[] args) {
 		launch(args);
@@ -109,6 +112,55 @@ public class Main extends Application {
 			}
 		});
 
+		AnimationTimer t = new AnimationTimer() {
+			private int frame = 0;
+			private long lastUpdate = 0;
+
+			@Override
+			public void handle(long now) {
+				if (now - lastUpdate >= frameRate) {
+					frame++;
+					canvas = new Canvas(frameList.get(frame).getFrame());
+					resetVBox(vb, toolbar);
+					if (frame >= frameList.size() - 1) {
+						frame = 0;
+						this.stop();
+					}
+					lastUpdate = now;
+				}
+
+			}
+
+		};
+		
+		
+		
+		
+		Button btnPlay = new Button("Play 24 Frames");
+		toolbar.getChildren().add(btnPlay);
+		btnPlay.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				//41.66667 milliseconds equals 24 frames per second
+				frameRate = 41_666_667;
+				t.start();
+			}
+		});
+		
+		Button btnPlay12 = new Button("Play 12 Frames");
+		toolbar.getChildren().add(btnPlay12);
+		btnPlay12.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				//83.333333 milliseconds equals 12 frames per second
+				frameRate = 83_333_333;
+				t.start();
+				
+			}
+		});
+
 		vb.getChildren().add(toolbar);
 		stage.setScene(new Scene(vb));
 		stage.show();
@@ -121,6 +173,10 @@ public class Main extends Application {
 	public void resetVBox(VBox vb, HBox hb) {
 		vb.getChildren().clear();
 		vb.getChildren().addAll(canvas, hb);
+	}
+
+	public void playFrames(long delay, VBox vb, HBox hb) {
+
 	}
 
 }
