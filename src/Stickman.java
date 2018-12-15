@@ -113,8 +113,8 @@ public class Stickman extends Group {
 
 	/* Add nodes to the correct point position on stick-man */
 	private void intialiseNodes() {
-		for (Node n : nodeList) {
-			n.updatePos(n.getPointTwo());
+		for (Node node : nodeList) {
+			node.updatePos(node.getPointTwo());
 		}
 	}
 
@@ -199,9 +199,9 @@ public class Stickman extends Group {
 
 	/* Updates all points in the point list */
 	public void move(Point diff) {
-		for (Point p : pointList) {
-			p.setX(diff.getX());
-			p.setY(diff.getY());
+		for (Point point : pointList) {
+			point.setX(diff.getX());
+			point.setY(diff.getY());
 		}
 		nodeToPoint();
 	}
