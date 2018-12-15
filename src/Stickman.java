@@ -48,8 +48,6 @@ public class Stickman extends Group {
 	private Node backNode = new Node(8, Color.RED, shoulder, posterior);
 	private Node headNode = new Node(25, Color.GREY, shoulder, head);
 
-	private Canvas group;
-
 	public double layoutX;
 	public double layoutY;
 
@@ -58,8 +56,6 @@ public class Stickman extends Group {
 	}
 
 	public Stickman(Stickman other, Canvas group) {
-		// do all stuff from other constructor
-
 		shoulder.updatePointFromOther(other.shoulder);
 		head.updatePointFromOther(other.head);
 		posterior.updatePointFromOther(other.posterior);
@@ -69,13 +65,10 @@ public class Stickman extends Group {
 		rightFoot.updatePointFromOther(other.rightFoot);
 
 		initialiseStickman(group);
-		// this.updateTranslate(other);
 
-		// ...
 	}
 
 	public void initialiseStickman(Canvas group) {
-		this.group = group;
 		/* Initiate line list and node list */
 		lineList.add(leftArm);
 		lineList.add(rightArm);
@@ -157,7 +150,7 @@ public class Stickman extends Group {
 			Bounds boundsInGroup = man.localToScene(man.getBoundsInLocal());
 			if (event.getButton() == MouseButton.PRIMARY) {
 				Point mouse = new Point(event.getSceneX() - shoulder.x, event.getSceneY() - shoulder.y);
-				if ((boundsInGroup.getMinX() + mouse.x) > 0 && (boundsInGroup.getMaxX() + mouse.x) < 700
+				if ((boundsInGroup.getMinX() + mouse.x) > 0 && (boundsInGroup.getMaxX() + mouse.x) < 750
 						&& (boundsInGroup.getMinY() + mouse.y) > 0 && (boundsInGroup.getMaxY() + mouse.y < 600)) {
 					move(mouse);
 				}

@@ -1,0 +1,84 @@
+a {}
+
+.background {
+	-fx-background-color: #214a8c;
+	-fx-text-fill: #214a8c;
+	-fx-border-color:#000000;
+	-fx-border-width: 2.0px;
+	-fx-border-style: solid;
+	}
+	
+.play, .play:active{
+  -fx-background-color: #00FF00;
+  -fx-text-fill: #000000;
+  -fx-border-color:#000000;
+  -fx-border-width: 2.0px;
+  -fx-border-style: solid;
+  }
+  
+.play:active {
+	-fx-background-color: #008b00;
+}
+  
+.changeFrame, .changeFrame:active {
+  -fx-background-color: #4876ff;
+  -fx-text-fill: #000000;
+  -fx-border-color:#000000;
+  -fx-border-width: 2.0px;
+  -fx-border-style: solid;	
+}
+
+.changeFrame:active{
+	-fx-background-color:#27408b;
+	}
+
+.addFrame, .addFrame:active{
+  -fx-background-color: #63b8ff;
+  -fx-text-fill: #000000;
+  -fx-border-color:#000000;
+  -fx-border-width: 2.0px;
+  -fx-border-style: solid;		
+}
+
+.addFrame:active {
+	-fx-background-color:#4f94cd;
+	}
+	
+.addStickman{
+  -fx-background-color: #87ceff;
+  -fx-text-fill: #000000;
+  -fx-border-color:#000000;
+  -fx-border-width: 2.0px;
+  -fx-border-style: solid;		
+}
+
+.undo {
+  -fx-background-color: #20b2aa;
+  -fx-text-fill: #000000;
+  -fx-border-color:#000000;
+  -fx-border-width: 2.0px;
+  -fx-border-style: solid;			
+}
+
+.txtFrame {
+	-fx-text-fill:#000000;
+	-fx-background-color:#bbffff;
+}
+
+.submit, .submit:active  {
+  -fx-background-color: #008b45;
+  -fx-text-fill: #000000;
+  -fx-border-color:#000000;
+  -fx-border-width: 2.0px;
+  -fx-border-style: solid;	
+}
+
+.submit:active {
+	  -fx-background-color: #ffffff;
+}
+
+
+
+
+
+

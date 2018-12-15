@@ -9,6 +9,7 @@ public class Canvas extends Group {
 
 	ArrayList<Stickman> stickmanList = new ArrayList<Stickman>();
 
+	/* Creates a new canvas */
 	public Canvas(int width, int height) {
 		Rectangle rect = new Rectangle(width - 100, height, Color.WHITE);
 		rect.setStroke(Color.BLACK);
@@ -17,8 +18,9 @@ public class Canvas extends Group {
 
 	}
 
+	/* Makes a copy of another canvas not a reference */
 	public Canvas(Canvas other) {
-		int width = 800;
+		int width = 850;
 		int height = 600;
 		Rectangle rect = new Rectangle(width - 100, height, Color.WHITE);
 		rect.setStroke(Color.BLACK);
