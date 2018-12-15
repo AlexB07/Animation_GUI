@@ -12,29 +12,30 @@ public class Node extends Circle {
 		super(radius, color);
 		this.one = one;
 		this.two = two;
-		length = (Math.pow((two.x - one.x), 2) + (Math.pow((two.y - one.y), 2)));
+		//works out the length of a line given two points
+		length = (Math.pow((two.getX() - one.getX()), 2) + (Math.pow((two.getY() - one.getY()), 2)));
 		length = Math.sqrt(length);
 	}
-
+	/*Created a new node without length*/
 	public Node(int radius, Color color) {
 		super(radius, color);
 	}
-
+	/*Returns point one*/
 	public Point getPointOne() {
 		return this.one;
 	}
-
+	/*Returns point two*/
 	public Point getPointTwo() {
 		return this.two;
 	}
-
+	/*return lenth of the line*/
 	public double getLength() {
 		return this.length;
 	}
-
+	/*sets the point of the node from a point*/
 	public void updatePos(Point point) {
-		setCenterX(point.x);
-		setCenterY(point.y);
+		setCenterX(point.getX());
+		setCenterY(point.getY());
 
 	}
 

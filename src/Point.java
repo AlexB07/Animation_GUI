@@ -1,29 +1,21 @@
+	
 
 /** Simple class to hold a point position */
 class Point {
 
-	public Point() {
-
-	}
-
+	private double x;
+	private double y;
+	/* Creates new point */
 	public Point(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
-
-	public Point(double x, double y, Point p) {
-		this.x = x;
-		this.y = y;
-		this.length = (Math.pow((p.x - x), 2) + (Math.pow((p.y - y), 2)));
-		this.length = Math.sqrt(this.length);
-	}
-
 	/* Update x and y co-ordinates */
 	public void updatePoint(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
-
+	/* Update point from another point */
 	public void updatePointFromOther(Point other) {
 		this.x = other.x;
 		this.y = other.y;
@@ -34,12 +26,23 @@ class Point {
 		this.x = circle.getCenterX();
 		this.y = circle.getCenterY();
 	}
-
-	public double getLength() {
-		return this.length;
+	/*Return x*/
+	public double getX() {
+		return this.x;
+	}
+	/*Sets x equal to its self plus value*/
+	public void setX(double x) {
+		this.x += x;
+	}
+	/*Return y*/
+	public double getY() {
+		return this.y;
+	}
+	/*Sets y equal to its self plus value*/
+	public void setY(double y) {
+		this.y += y;
 	}
 
-	public double x;
-	public double y;
-	private double length;
+
+
 }

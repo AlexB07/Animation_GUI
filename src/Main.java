@@ -18,7 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class Main extends Application {
-	static Canvas canvas = new Canvas(850, 600);
+	static Canvas canvas = new Canvas();
 	static ArrayList<Frame> frameList = new ArrayList<Frame>();
 	static int currentFrame = 0;
 	Text txtFrame = new Text("No Frames");
@@ -28,24 +28,20 @@ public class Main extends Application {
 		launch(args);
 	}
 
-	public void undo(ArrayList<Canvas> canvasList, int index) {
-		if (canvasList.size() >= 1) {
-			if (canvasList.size() != 1) {
-				canvasList.remove(index - 1);
-			} else {
-				canvasList.clear();
-				canvasList.add(new Canvas(canvas));
-			}
-		}
-	}
 
 	public void start(Stage stage) {
-		// undoList.add(new Canvas(canvas));
+		//Adds first frame to list, so that the first one can be undone
 		frameList.add(new Frame(canvas));
 		VBox vb = new VBox();
+		//gets CSS style sheet
+		vb.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 		vb.getChildren().add(canvas);
 		stage.setTitle("Animation");
 		HBox toolbar = new HBox();
+		
+		
+		
+		/*Creating undo button*/
 		Button btnUndo = new Button("Undo");
 		btnUndo.getStyleClass().add("undo");
 		toolbar.getChildren().add(btnUndo);
@@ -59,7 +55,7 @@ public class Main extends Application {
 				resetVBox(vb, toolbar);
 			}
 		});
-		txtFrame.getStyleClass().add("txtFrame");
+		/* Creating add stickman button */
 		Button btnAddStickman = new Button("Add Stickman");
 		btnAddStickman.getStyleClass().add("addStickman");
 		toolbar.getChildren().add(btnAddStickman);
@@ -70,13 +66,13 @@ public class Main extends Application {
 			}
 		});
 
+		/*Creating add frame button*/
 		Button btnAddFrame = new Button("Add Frame");
 		btnAddFrame.getStyleClass().add("addFrame");
 		toolbar.getChildren().add(btnAddFrame);
 		btnAddFrame.setOnAction(new EventHandler<ActionEvent>() {
 
 			public void handle(ActionEvent event) {
-				System.out.println("Adding new frame");
 				frameList.add(new Frame(canvas));
 				currentFrame++;
 				setFrameText();
@@ -84,6 +80,7 @@ public class Main extends Application {
 			}
 		});
 
+		/*Creating back frame button*/
 		Button btnBackFrame = new Button("Back Frame");
 		btnBackFrame.getStyleClass().add("changeFrame");
 		toolbar.getChildren().add(btnBackFrame);
@@ -93,7 +90,6 @@ public class Main extends Application {
 			public void handle(ActionEvent event) {
 				if (currentFrame >= 1) {
 					currentFrame--;
-					System.out.println("currentFrame " + currentFrame + " size " + frameList.size());
 					canvas = new Canvas(frameList.get(currentFrame).getFrame());
 					resetVBox(vb, toolbar);
 					setFrameText();
@@ -101,7 +97,14 @@ public class Main extends Application {
 
 			}
 		});
+		
+		/*adding style and adding it to the toolbar group for text select frame
+		 * Display in middle of change frame buttons
+		 * */
+		txtFrame.getStyleClass().add("txtFrame");
 		toolbar.getChildren().add(txtFrame);
+		
+		/* Creating Next button */
 		Button btnNextFrame = new Button("Next Frame");
 		btnNextFrame.getStyleClass().add("changeFrame");
 		toolbar.getChildren().add(btnNextFrame);
@@ -112,7 +115,6 @@ public class Main extends Application {
 
 				if (currentFrame < frameList.size() - 1) {
 					currentFrame++;
-					System.out.println("frame " + currentFrame + " size " + frameList.size());
 					canvas = new Canvas(frameList.get(currentFrame).getFrame());
 					resetVBox(vb, toolbar);
 					setFrameText();
@@ -120,7 +122,7 @@ public class Main extends Application {
 
 			}
 		});
-
+		/* Creating textfield for frame number select */
 		TextField txtFInput = new TextField();
 		txtFInput.setMaxWidth(76);
 		txtFInput.setPromptText("Frame Num");
@@ -134,8 +136,7 @@ public class Main extends Application {
 			}
 		});
 		toolbar.getChildren().add(txtFInput);
-		
-		/** Creation of the submit button for frame **/
+		/* Creation of the submit button for frame */
 		Button btnSubmit = new Button("Sumbit");
 		btnSubmit.getStyleClass().add("submit");
 		toolbar.getChildren().add(btnSubmit);
@@ -143,7 +144,6 @@ public class Main extends Application {
 
 			@Override
 			public void handle(ActionEvent event) {
-				System.out.println(txtFInput.getText());
 				// Validation for the input frame number box, if empty, and to make sure its in
 				// the correct range.
 				if (txtFInput.getText().isEmpty() || (Integer.parseInt(txtFInput.getText()) > frameList.size()
@@ -170,19 +170,21 @@ public class Main extends Application {
 
 			}
 		});
-
+		/*Creation for animation play buttons*/
 		AnimationTimer t = new AnimationTimer() {
-			private int frame = 0;
+			private int frame = -1;
 			private long lastUpdate = 0;
 
 			@Override
 			public void handle(long now) {
+				//creates delay between frames
 				if (now - lastUpdate >= frameRate && frameList.size() > 1) {
 					frame++;
 					canvas = new Canvas(frameList.get(frame).getFrame());
 					resetVBox(vb, toolbar);
+					//Stops animation when its reaches the end of the frames created
 					if (frame >= frameList.size() - 1) {
-						frame = 0;
+						frame = -1;
 						this.stop();
 					}
 					lastUpdate = now;
@@ -191,8 +193,9 @@ public class Main extends Application {
 			}
 
 		};
-
+		/*Creating button play 24 frames per second*/
 		Button btnPlay = new Button("Play 24");
+		//hover over button, display what this button does
 		btnPlay.setTooltip(new Tooltip("Plays animation 24 Frames Per Second (24 FPS)"));
 		btnPlay.getStyleClass().add("play");
 		toolbar.getChildren().add(btnPlay);
@@ -206,10 +209,11 @@ public class Main extends Application {
 
 			}
 		});
-
+		/*Creating button play 12 frames per second */
 		Button btnPlay12 = new Button("Play 12");
 		btnPlay12.getStyleClass().add("play");
 		toolbar.getChildren().add(btnPlay12);
+		//hover over button, display what this button does
 		btnPlay12.setTooltip(new Tooltip("Plays animation 12 Frames Per Second (12 FPS)"));
 		btnPlay12.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -222,19 +226,31 @@ public class Main extends Application {
 			}
 		});
 
+		/*adds toolbar of buttons and inputs to the display, and creates a new scene*/
 		vb.getChildren().add(toolbar);
-		vb.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 		stage.setScene(new Scene(vb));
 		stage.show();
 	}
-
+	//sets frame selected text
 	public void setFrameText() {
 		txtFrame.setText("Frame " + (currentFrame) + " of " + (frameList.size() - 1));
 	}
-
+	/* Resets displayed canvas */
 	public void resetVBox(VBox vb, HBox hb) {
 		vb.getChildren().clear();
 		vb.getChildren().addAll(canvas, hb);
+	}
+	
+	/* Undo procedure */
+	public void undo(ArrayList<Canvas> canvasList, int index) {
+		if (canvasList.size() >= 1) {
+			if (canvasList.size() != 1) {
+				canvasList.remove(index - 1);
+			} else {
+				canvasList.clear();
+				canvasList.add(new Canvas(canvas));
+			}
+		}
 	}
 
 }

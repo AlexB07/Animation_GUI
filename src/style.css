@@ -1,13 +1,7 @@
 a {}
 
-.background {
-	-fx-background-color: #214a8c;
-	-fx-text-fill: #214a8c;
-	-fx-border-color:#000000;
-	-fx-border-width: 2.0px;
-	-fx-border-style: solid;
-	}
-	
+
+/* play 12FPS and 24FPS buttons*/	
 .play, .play:active{
   -fx-background-color: #00FF00;
   -fx-text-fill: #000000;
@@ -16,10 +10,11 @@ a {}
   -fx-border-style: solid;
   }
   
+ /*Change on active button */
 .play:active {
 	-fx-background-color: #008b00;
 }
-  
+ /*Back frame and Next frame buttons */
 .changeFrame, .changeFrame:active {
   -fx-background-color: #4876ff;
   -fx-text-fill: #000000;
@@ -27,11 +22,11 @@ a {}
   -fx-border-width: 2.0px;
   -fx-border-style: solid;	
 }
-
+/*Change on active button */
 .changeFrame:active{
 	-fx-background-color:#27408b;
 	}
-
+/*add frame button */
 .addFrame, .addFrame:active{
   -fx-background-color: #63b8ff;
   -fx-text-fill: #000000;
@@ -40,10 +35,12 @@ a {}
   -fx-border-style: solid;		
 }
 
+/*change on active button */
 .addFrame:active {
 	-fx-background-color:#4f94cd;
 	}
 	
+/* add stickman button */
 .addStickman{
   -fx-background-color: #87ceff;
   -fx-text-fill: #000000;
@@ -52,6 +49,7 @@ a {}
   -fx-border-style: solid;		
 }
 
+/*undo button */
 .undo {
   -fx-background-color: #20b2aa;
   -fx-text-fill: #000000;
@@ -59,12 +57,13 @@ a {}
   -fx-border-width: 2.0px;
   -fx-border-style: solid;			
 }
-
+/*Textfield input frame number */
 .txtFrame {
 	-fx-text-fill:#000000;
 	-fx-background-color:#bbffff;
 }
 
+/*submit button */
 .submit, .submit:active  {
   -fx-background-color: #008b45;
   -fx-text-fill: #000000;
@@ -72,7 +71,7 @@ a {}
   -fx-border-width: 2.0px;
   -fx-border-style: solid;	
 }
-
+/*change when active */
 .submit:active {
 	  -fx-background-color: #ffffff;
 }

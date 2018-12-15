@@ -8,23 +8,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class Stickman extends Group {
-	/* Group in which the stickman is added to */
+	/* Group in which the stickman is added to find the bounds of each stick-man */
 	private Group man = new Group();
 
-	private double x;
-	private double y;
-
 	/* Set up some initial positions for the parts of the stick figure */
-	private Point shoulder = new Point(100, 100);
-	private Point posterior = new Point(100, 150);
-	private Point leftHand = new Point(50, 100);
-	private Point rightHand = new Point(150, 100);
-	private Point head = new Point(100, 50);
-	private Point leftFoot = new Point(65, 200);
-	private Point rightFoot = new Point(135, 200);
-
-	/* Array node list */
-	public ArrayList<Node> nodeList = new ArrayList<Node>();
+	private Point shoulder = new Point(150, 150);
+	private Point posterior = new Point(150, 200);
+	private Point leftHand = new Point(100, 150);
+	private Point rightHand = new Point(200, 150);
+	private Point head = new Point(150, 100);
+	private Point leftFoot = new Point(115, 250);
+	private Point rightFoot = new Point(185, 250);
 
 	/* initial creation of line for body parts */
 	private Line leftArm = new Line();
@@ -37,8 +31,12 @@ public class Stickman extends Group {
 	/* Line array list */
 	public ArrayList<Line> lineList = new ArrayList<Line>();
 
+	/* Point array list */
 	public ArrayList<Point> pointList = new ArrayList<Point>();
-
+	
+	/* Node array list */
+	public ArrayList<Node> nodeList = new ArrayList<Node>();
+	
 	/* And some a node to drag the left hand around with */
 	private Node leftHandNode = new Node(8, Color.RED, shoulder, leftHand);
 	private Node rightHandNode = new Node(8, Color.RED, shoulder, rightHand);
@@ -48,13 +46,10 @@ public class Stickman extends Group {
 	private Node backNode = new Node(8, Color.RED, shoulder, posterior);
 	private Node headNode = new Node(25, Color.GREY, shoulder, head);
 
-	public double layoutX;
-	public double layoutY;
-
 	public Stickman(Canvas group) {
 		initialiseStickman(group);
 	}
-
+	/*Creates a new stick-man from another stick-man and adds it to the canvas*/
 	public Stickman(Stickman other, Canvas group) {
 		shoulder.updatePointFromOther(other.shoulder);
 		head.updatePointFromOther(other.head);
@@ -63,13 +58,12 @@ public class Stickman extends Group {
 		rightHand.updatePointFromOther(other.rightHand);
 		leftFoot.updatePointFromOther(other.leftFoot);
 		rightFoot.updatePointFromOther(other.rightFoot);
-
 		initialiseStickman(group);
 
 	}
-
+	/*Creates a orignal sitck-man*/
 	public void initialiseStickman(Canvas group) {
-		/* Initiate line list and node list */
+		/* Initiate line list, node list and point list */
 		lineList.add(leftArm);
 		lineList.add(rightArm);
 		lineList.add(neck);
@@ -83,7 +77,6 @@ public class Stickman extends Group {
 		nodeList.add(neckNode);
 		nodeList.add(backNode);
 		nodeList.add(headNode);
-
 		pointList.add(head);
 		pointList.add(leftFoot);
 		pointList.add(leftHand);
@@ -104,6 +97,7 @@ public class Stickman extends Group {
 		}
 
 		pointsToShapes();
+		//sets all action handlers for the nodes
 		leftHandNode.setOnMouseDragged(nodeMouseEvent);
 		rightHandNode.setOnMouseDragged(nodeMouseEvent);
 		leftFootNode.setOnMouseDragged(nodeMouseEvent);
@@ -128,18 +122,14 @@ public class Stickman extends Group {
 	EventHandler<MouseEvent> nodeMouseEvent = new EventHandler<MouseEvent>() {
 		public void handle(MouseEvent e) {
 			if (e.getButton() == MouseButton.PRIMARY) {
-				Node temp = (Node) e.getSource();
-				Point mouse = new Point(e.getX(), e.getY());
-				double lengthToMouse = lengthOfLine(temp.getPointOne(), mouse);
-				double lengthOfPart = lengthOfLine(temp.getPointOne(), temp.getPointTwo());
-				if ((lengthToMouse >= lengthOfPart) || (lengthToMouse <= lengthOfPart)) {
-					temp.setCenterX(
-							temp.getPointOne().x + (lengthOfPart * (e.getX() - temp.getPointOne().x)) / lengthToMouse);
-					temp.setCenterY(
-							temp.getPointOne().y + (lengthOfPart * (e.getY() - temp.getPointOne().y)) / lengthToMouse);
-					pointToNode();
+				//gets the node the user clicked on
+				Node node = (Node) e.getSource();
+				double lengthToMouse = lengthOfLine(node.getPointOne(), new Point(e.getX(), e.getY()));
+				//works out where the hand point should be to keep the body part length the same
+				node.setCenterX(node.getPointOne().getX() + (node.getLength() * (e.getX() - node.getPointOne().getX())) / lengthToMouse);
+				node.setCenterY(node.getPointOne().getY() + (node.getLength() * (e.getY() - node.getPointOne().getY())) / lengthToMouse);
+				pointToNode();
 
-				}
 			}
 		}
 	};
@@ -149,9 +139,10 @@ public class Stickman extends Group {
 		public void handle(MouseEvent event) {
 			Bounds boundsInGroup = man.localToScene(man.getBoundsInLocal());
 			if (event.getButton() == MouseButton.PRIMARY) {
-				Point mouse = new Point(event.getSceneX() - shoulder.x, event.getSceneY() - shoulder.y);
-				if ((boundsInGroup.getMinX() + mouse.x) > 0 && (boundsInGroup.getMaxX() + mouse.x) < 750
-						&& (boundsInGroup.getMinY() + mouse.y) > 0 && (boundsInGroup.getMaxY() + mouse.y < 600)) {
+				Point mouse = new Point(event.getSceneX() - shoulder.getX(), event.getSceneY() - shoulder.getY());
+				//Keeps stick-man in the canvas (border)
+				if ((boundsInGroup.getMinX() + mouse.getX()) > 0 && (boundsInGroup.getMaxX() + mouse.getX()) < 750
+						&& (boundsInGroup.getMinY() + mouse.getY()) > 0 && (boundsInGroup.getMaxY() + mouse.getY() < 600)) {
 					move(mouse);
 				}
 
@@ -161,23 +152,13 @@ public class Stickman extends Group {
 
 	};
 
-	public void updateTranslate(Stickman other) {
-		// other.setTranslateX(man.getTranslateX());
-		// other.setTranslateY(man.getTranslateY());
-		System.out.println("x " + man.getTranslateX());
-		other.man.setTranslateX(x);
-		other.man.setTranslateY(y);
-	}
-
+	
+	/** Release event for all nodes, adds new frame to framelist in main **/
 	EventHandler<MouseEvent> nodeReleaseEvent = new EventHandler<MouseEvent>() {
 
 		@Override
 		public void handle(MouseEvent event) {
-			System.out.println("creating undo record and size is " + Main.frameList.size());
-			System.out.println(Main.currentFrame);
-			// Main.undoList.add(new Canvas(Main.canvas));
 			Main.frameList.get(Main.currentFrame).addToList(Main.canvas);
-
 			pointToNode();
 
 		}
@@ -191,13 +172,13 @@ public class Stickman extends Group {
 			if (event.getButton() == MouseButton.PRIMARY) {
 				Point mouse = new Point(event.getX(), event.getY());
 				double lengthOfMouse = lengthOfLine(head, mouse);
-				double lengthOfNeck = lengthOfLine(head, shoulder);
+				//double lengthOfNeck = lengthOfLine(head, shoulder);
 				Point difference = null;
-				double x = (headNode.getPointTwo().x
-						+ ((lengthOfNeck) * ((event.getX()) - headNode.getPointTwo().x)) / (lengthOfMouse));
-				double y = (headNode.getPointTwo().y
-						+ ((lengthOfNeck) * ((event.getY()) - headNode.getPointTwo().y)) / (lengthOfMouse));
-				difference = new Point(x - shoulder.x, y - shoulder.y);
+				double x = (headNode.getPointTwo().getX()
+						+ ((headNode.getLength()) * ((event.getX()) - headNode.getPointTwo().getX())) / (lengthOfMouse));
+				double y = (headNode.getPointTwo().getY()
+						+ ((headNode.getLength()) * ((event.getY()) - headNode.getPointTwo().getY())) / (lengthOfMouse));
+				difference = new Point(x - shoulder.getX(), y - shoulder.getY());
 				setPositionOfNodes(difference);
 				pointToNode();
 
@@ -205,28 +186,30 @@ public class Stickman extends Group {
 		}
 
 	};
-
+	/* sets position of nodes for rotation of body */
 	public void setPositionOfNodes(Point diff) {
 		// head should not move in this added back later
 		nodeList.remove(headNode);
 		for (Node node : nodeList) {
-			node.setCenterX(node.getCenterX() + diff.x);
-			node.setCenterY(node.getCenterY() + diff.y);
+			node.setCenterX(node.getCenterX() + diff.getX());
+			node.setCenterY(node.getCenterY() + diff.getY());
 		}
 		nodeList.add(headNode);
 	}
 
+	/* Updates all points in the point list */
 	public void move(Point diff) {
 		for (Point p : pointList) {
-			p.x += diff.x;
-			p.y += diff.y;
+			p.setX(diff.getX());
+			p.setY(diff.getY());
 		}
 		nodeToPoint();
 	}
 
+	/* Calculates the length of a line given two points*/
 	public double lengthOfLine(Point one, Point two) {
 		double length;
-		length = (Math.pow((two.x - one.x), 2) + (Math.pow((two.y - one.y), 2)));
+		length = (Math.pow((two.getX() - one.getX()), 2) + (Math.pow((two.getY() - one.getY()), 2)));
 		length = Math.sqrt(length);
 		return length;
 
@@ -244,6 +227,7 @@ public class Stickman extends Group {
 		pointsToShapes();
 	}
 
+	/* Update node position from point */
 	private void nodeToPoint() {
 		leftHandNode.updatePos(leftHand);
 		rightHandNode.updatePos(rightHand);
@@ -258,10 +242,10 @@ public class Stickman extends Group {
 
 	/** Helper method to set up a line using two Points */
 	private void setupLine(Line line, Point start, Point end) {
-		line.setStartX(start.x);
-		line.setStartY(start.y);
-		line.setEndX(end.x);
-		line.setEndY(end.y);
+		line.setStartX(start.getX());
+		line.setStartY(start.getY());
+		line.setEndX(end.getX());
+		line.setEndY(end.getY());
 	}
 
 	/** Set up our shapes to the current positions of our points */
